@@ -1,6 +1,5 @@
 package com.example.android.visitor;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,13 +10,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText mnoId;
+    private EditText id_visitor;
     private Button btn_in,btn_out,submit;
 
     private FirebaseDatabase mFrirebaseDatabase;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initFirebase() {
         FirebaseApp.initializeApp(this);
         mFrirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseRefrence = mFrirebaseDatabase.getReference();
+        mDatabaseRefrence = mFrirebaseDatabase.getReference("visitor");
     }
 
     @Override
@@ -63,8 +64,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void visitorOut(AlertDialog dialog) {
         try {
-            mDatabaseRefrence.child("visitor").child(mnoId.getText().toString()).child("waktu_keluar").setValue(ServerValue.TIMESTAMP);
-            Toast.makeText(MainActivity.this,"Terima Kasih",Toast.LENGTH_LONG).show();
+//            if(mDatabaseRefrence.child("key").child("id_visitor").equalTo(id_visitor.getText().toString()))
+//            {
+//
+//            }
+//            Toast.makeText(MainActivity.this,"Terima Kasih",Toast.LENGTH_LONG).show();
+
+            mDatabaseRefrence.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot visitor:dataSnapshot.getChildren()){
+                        if(visitor.child(id_visitor.getText().toString()).exists()){
+                            Toast.makeText(MainActivity.this,"Data ditemukan",Toast.LENGTH_LONG).show();
+                        }
+                    }
+//                    if(dataSnapshot.child("key").child(id_visitor.getText().toString()).exists()) {
+//                        Toast.makeText(MainActivity.this,"Data ditemukan",Toast.LENGTH_LONG).show();
+//                    }else{
+//                        Toast.makeText(MainActivity.this,"Data tidak ditemukan",Toast.LENGTH_LONG).show();
+//
+//                    }
+//                    if(dataSnapshot.child("key").child(id_visitor.getText().toString()).exists()){
+//                        Toast.makeText(MainActivity.this,"Data ditemukan",Toast.LENGTH_LONG).show();
+//                    }else{
+//                        Toast.makeText(MainActivity.this,"Data tidak ditemukan",Toast.LENGTH_LONG).show();
+//                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
             dialog.dismiss();
         }catch (Exception e){
             Toast.makeText(MainActivity.this,"Terjadi masalah : "+e.getMessage(),Toast.LENGTH_LONG).show();
@@ -75,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void dialogOut() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
         View mview = getLayoutInflater().inflate(R.layout.visitor_out,null);
-        mnoId = (EditText)mview.findViewById(R.id.id_visitor);
+        id_visitor = (EditText)mview.findViewById(R.id.id_visitor);
         submit = (Button)mview.findViewById(R.id.submit);
         submit.setOnClickListener(this);
         mBuilder.setView(mview);

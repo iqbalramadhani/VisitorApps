@@ -70,7 +70,7 @@ public class FormInput extends AppCompatActivity implements View.OnClickListener
     private void simpanVisitor() {
         try {
             Visitor visitor = new Visitor(id.getText().toString(),nama.getText().toString(),instansi.getText().toString(),keperluan.getText().toString(), ServerValue.TIMESTAMP,null);
-            mDatabaseRefrence.child("visitor").child(visitor.getId_visitor()).setValue(visitor);
+            mDatabaseRefrence.child("visitor").push().setValue(visitor);
             Toast.makeText(FormInput.this,"Data berhasil ditambahkan",Toast.LENGTH_LONG).show();
             startActivity(new Intent(FormInput.this,MainActivity.class));
             finish();
