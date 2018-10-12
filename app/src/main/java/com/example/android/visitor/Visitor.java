@@ -12,18 +12,19 @@ public class Visitor {
     private String nama;
     private String instansi;
     private String keperluan;
-    private Map waktu_masuk,waktu_keluar;
+    private String ttd_masuk;
+    private Map waktu_masuk;
 
     public Visitor() {
     }
 
-    public Visitor(String id_visitor, String nama, String instansi, String keperluan, Map waktu_masuk, Map waktu_keluar) {
+    public Visitor(String id_visitor, String nama, String instansi, String keperluan, String ttd_masuk, Map waktu_masuk) {
         this.id_visitor = id_visitor;
         this.nama = nama;
         this.instansi = instansi;
         this.keperluan = keperluan;
+        this.ttd_masuk = ttd_masuk;
         this.waktu_masuk = waktu_masuk;
-        this.waktu_keluar = waktu_keluar;
     }
 
     public String getId_visitor() {
@@ -58,19 +59,19 @@ public class Visitor {
         this.keperluan = keperluan;
     }
 
+    public String getTtd_masuk() {
+        return ttd_masuk;
+    }
+
+    public void setTtd_masuk(String ttd_masuk) {
+        this.ttd_masuk = ttd_masuk;
+    }
+
     public Map getWaktu_masuk() {
         return waktu_masuk;
     }
 
     public void setWaktu_masuk(Map waktu_masuk) {
         this.waktu_masuk = waktu_masuk;
-    }
-
-    public Map getWaktu_keluar() {
-        return waktu_keluar;
-    }
-
-    public void setWaktu_keluar(Map waktu_keluar) {
-        this.waktu_keluar = waktu_keluar;
     }
 }
